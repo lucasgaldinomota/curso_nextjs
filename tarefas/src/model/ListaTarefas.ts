@@ -1,5 +1,5 @@
-import Tarefa from "./Tarefa"
-import TipoFiltro from "./TipoFiltro"
+import Tarefa from "./Tarefa";
+import TipoFiltro from "./TipoFiltro";
 
 export default class ListaTarefas {
     #todas: Tarefa[]

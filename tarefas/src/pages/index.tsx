@@ -1,39 +1,31 @@
-import Tarefa from "../model/Tarefa"
+import { useState } from "react"
+import Cabecalho from "../components/template/Cabecalho"
+import Conteudo from "../components/template/Conteudo"
+import Formulario from "../components/formulario/Formulario"
+import Lista from "../components/lista/Lista"
 import tarefasIniciais from '../data/mock'
+import Tarefa from "../model/Tarefa"
+import ListaTarefas from "../model/ListaTarefas"
 
 export default function Home() {
+    const [tarefas, setTarefas] = useState(tarefasIniciais)
 
-    let tarefas = tarefasIniciais
-    tarefas = tarefas.filtrarAtivas()
-    tarefas = tarefas.filtrarConcluidas()
-    //tarefas = tarefas.removerFiltro()
-    tarefas = tarefas.excluirConcluidas()
+    function mudou(novasTarefas: ListaTarefas) {
+        setTarefas(novasTarefas)
+    }
 
-    tarefas = tarefas.adicionarTarefa(Tarefa.criarConcluida(6, 'Lavar os pratos!!!'))
-    tarefas = tarefas.adicionarTarefa(Tarefa.criarAtiva(7, 'Cuidar das crianças!'))
-    tarefas = tarefas.excluirConcluidas()
-
-    tarefas = tarefas.modificarTarefa(tarefas.itens[2].alternarStatus())
-    tarefas = tarefas.modificarTarefa(tarefas.itens[1].alternarStatus())
-
-    function renderizarTarefas() {
-        return tarefas.itens.map(tarefa => {
-            return (
-                <div key={tarefa.id}>
-                    <span>{tarefa.id} | </span>
-                    <span>{tarefa.descricao} | </span>
-                    <span>{tarefa.concluida ? 'Concluída' : 'Ativa'}</span>
-                </div>
-            )
-        })
+    function novaTarefaCriada(novaTarefa: Tarefa) {
+        setTarefas(tarefas.adicionarTarefa(novaTarefa))
     }
 
     return (
-        <div className={`
-        flex flex-col justify-center items-center h-screen
-        text-white bg-gradient-to-tr from-purple-500 to-yellow-600
-        `}>
-            {renderizarTarefas()}
+        <div className={`flex flex-col h-screen bg-gray-300`}>
+            <Cabecalho>
+                <Formulario novaTarefaCriada={novaTarefaCriada} />
+            </Cabecalho>
+            <Conteudo>
+                <Lista tarefas={tarefas} mudou={mudou} />
+            </Conteudo>
         </div>
     )
 }
